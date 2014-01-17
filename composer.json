@@ -1,0 +1,10 @@
+{
+    "name": "tillkahlbrock/affili8",
+    "description": "affiliate app",
+    "keywords": ["affiliate"],
+    "license": "proprietary",
+    "require": {
+        "bca/curl": "dev-master",
+        "doctrine/couchdb": "@dev"
+    }
+}
