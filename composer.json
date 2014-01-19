@@ -5,6 +5,7 @@
     "license": "proprietary",
     "require": {
         "bca/curl": "dev-master",
-        "doctrine/couchdb": "@dev"
+        "doctrine/couchdb": "@dev",
+        "silex/silex": "~1.1"
     }
 }
