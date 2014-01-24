@@ -8,10 +8,9 @@ $app = new Silex\Application();
 
 $app->post('/affiliates', function(Request $request) use($app) {
         $data = $request->getContent();
-        return $data;
         $repository = new AffiliateRepository(new DatabaseClient());
-        $id = $repository->create($data);
-        return new Response(json_encode(array('id' => $id)), 201);
+        $ids = $repository->create($data);
+        return new Response(json_encode($ids), 201);
     });
 
 $app->run();
@@ -30,8 +29,7 @@ class AffiliateRepository
 
     public function create($data)
     {
-        $id = $this->databaseClient->store($data);
-        return $id;
+        return $this->databaseClient->store($data);
     }
 }
 
@@ -40,25 +38,14 @@ class DatabaseClient
     public function store($data)
     {
         $host = getenv('DB_PORT_5984_TCP_ADDR');
-        $port = getenv('DB_PORT_6379_TCP_PORT');
-        $dbname = 'affili8';
-        $url = $host . ':' . $port . '/' . $dbname;
-        $request = new BCA\CURL\CURL($url);
-        return $request->put($data);
-    }
-}
+        $port = getenv('DB_PORT_5984_TCP_PORT');
+        $dbName = 'affiliates';
 
-class Affiliate
-{
-    private $id;
+        $url = $host . ':' . $port . '/' . $dbName;
 
-    public function __construct($data = array())
-    {
-        $this->id = 1;
-    }
-
-    public function getId()
-    {
-        return $this->id;
+        $curl = new BCA\CURL\CURL($url);
+        $curl->header('Content-Type', 'application/json');
+        $responseArray = json_decode($curl->post($data)->__toString(),true);
+        return array('id' => $responseArray['id'], 'rev' => $responseArray['id']);
     }
 }
